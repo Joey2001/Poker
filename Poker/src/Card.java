@@ -9,24 +9,31 @@ public class Card {
         this.value = value;
     }
 
-    String Suit(){
+    private String Suit(){
         return suit;
     }
 
-    String Rank(){
-        return rank;
-    }
+//    String Rank(){
+//        return rank;
+//    }
 
-    int Value(){
+    private int Value(){
         return value;
     }
 
-    boolean Compare(Card card){
-        boolean cardSuit = card.suit.equals(this.suit);
-        boolean cardRank = card.rank.equals(this.rank);
-        boolean cardValue = card.value == this.value;
-        return cardSuit && cardRank && cardValue;
+//    boolean Compare(Card card){
+//        boolean cardSuit = card.suit.equals(this.suit);
+//        boolean cardRank = card.rank.equals(this.rank);
+//        boolean cardValue = card.value == this.value;
+//        return cardSuit && cardRank && cardValue;
+//
+//    }
 
+    static boolean CompareVal(Card a, Card b){
+        return a.Value() == b.Value();
+    }
+    static boolean CompareSuit(Card a, Card b){
+        return a.Suit().equals(b.Suit());
     }
 
     @Override
