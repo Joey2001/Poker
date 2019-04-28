@@ -2,42 +2,38 @@ import java.util.ArrayList;
 
 public class Deck {
     private static String[][] printCard;
-    private ArrayList<Card> cards;
+    private static ArrayList<Card> cards;
     private int deckSize;
-    private String[] symbol;
-    private int[] val;
 
     Deck(String[] rank, String[] suit, int[] value){
-        this.cards = new ArrayList<>();
+        cards = new ArrayList<>();
 
         for(int j = 0; j < rank.length; j++){
             for (String aSuit : suit) {
                 Card aCard = new Card(rank[j], aSuit, value[j]);
-                this.cards.add(aCard);
+                cards.add(aCard);
             }
         }
-        this.deckSize = this.cards.size();
+        this.deckSize = cards.size();
         printCard = CardMaker.constructCard();
-        symbol = CardMaker.symbol();
-        val = CardMaker.value();
         Shuffle();
     }
 
-    boolean isEmpty(){
-        return cards.size() == 0;
-    }
+//    boolean isEmpty(){
+//        return cards.size() == 0;
+//    }
 
-    int size(){
-        return this.cards.size();
-    }
+//    int size(){
+//        return cards.size();
+//    }
 
-    Card deal(){
-        if(this.deckSize > 0){
-            this.deckSize--;
-            return this.cards.get(this.deckSize);
-        }
-        return null;
-    }
+//    Card deal(){
+//        if(this.deckSize > 0){
+//            this.deckSize--;
+//            return cards.get(this.deckSize);
+//        }
+//        return null;
+//    }
 
     private void Shuffle(){
         for(int k = cards.size() - 1; k >= 0; k--) {
@@ -49,14 +45,6 @@ public class Deck {
             String[] tempPrn = printCard[r];
             printCard[r] = printCard[k];
             printCard[k] = tempPrn;
-
-            String temp = symbol[r];
-            symbol[r] = symbol[k];
-            symbol[k] = temp;
-
-            int temVal = val[r];
-            val[r] = val[k];
-            val[k] = temVal;
         }
     }
 
@@ -64,14 +52,49 @@ public class Deck {
         return printCard;
     }
 
-    static String[][] giveP1Cards(){
-        return new String[][]{printCard[0], printCard[1]};
+    private static Card[] cardsUsed(){
+        Card[] cardData = new Card[((PokerTester.numberOfPlayers * 2) + 5)];
+        for(int i = 0; i < cardData.length; i++){
+            cardData[i] = cards.get(i);
+        }
+        return cardData;
     }
-    static String[][] giveP2Cards(){
-        return new String[][]{printCard[2], printCard[3]};
+
+    static String[][] playerCards(int playerNum){
+        String[][] player = new String[2][PokerTester.numberOfPlayers];
+        for(int i = 0; i < player.length; i++){
+            player[i] = printCard[(2 * playerNum) - (i + 1)];
+        }
+        return player;
     }
+
+    static boolean[][][][] checkPoint(){
+        Card[][] players = new Card[PokerTester.numberOfPlayers][playerCards(1).length];
+        Card[] table = new Card[cardsUsed().length - (PokerTester.numberOfPlayers * 2)];
+        int v = 0;
+        for(int t = 0; t < players.length; t++){
+            for(int u = 0; u < players[0].length; u++){
+                players[t][u] = cardsUsed()[v];
+                v++;
+            }
+        }
+        if (table.length >= 0) System.arraycopy(cardsUsed(), (PokerTester.numberOfPlayers * 2), table, 0, table.length);
+        boolean[][][][] checkCards = new boolean[PokerTester.numberOfPlayers][table.length][2][2];
+        for(int i = 0; i < PokerTester.numberOfPlayers; i++){
+            for(int j = 0; j < table.length; j++){
+                for(int k = 0; k < 2; k++){
+                    checkCards[i][j][k][0] = Card.CompareSuit(players[i][k], table[j]);
+                    checkCards[i][j][k][1] = Card.CompareVal(players[i][k], table[j]);
+                }
+            }
+        }
+        return checkCards;
+    }
+
     static String[][] giveTableCards(){
-        return new String[][]{printCard[4], printCard[5], printCard[6], printCard[7], printCard[8]};
+        String[][] tableCards = new String[5][printCard[printCard.length - 1].length];
+        System.arraycopy(printCard, (PokerTester.numberOfPlayers * 2), tableCards, 0, tableCards.length);
+        return tableCards;
     }
 
     @Override
