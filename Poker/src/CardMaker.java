@@ -3,11 +3,14 @@ class CardMaker{
     static String[][] constructCard(){
 
         String topBot = " ----- ";
-
         String[] one = {"|  ♥  |", "|  ♣  |", "|  ♦  |", "|  ♠  |"};
+        String[] JQK = {"J", "Q", "K"};
 
         String[] newR = new String[13];
         String[] newL = new String[13];
+
+        newR[0]  = "|A    |";
+        newL[0]  = "|    A|";
 
         for(int i = 1; i < 10; i++){
             if(i + 1 < 10){
@@ -18,24 +21,19 @@ class CardMaker{
                 newL[i] = "|   " + (i + 1) + "|";
             }
         }
-        newR[0]  = "|A    |";
-        newL[0]  = "|    A|";
-        newR[10] = "|J    |";
-        newL[10] = "|    J|";
-        newR[11] = "|Q    |";
-        newL[11] = "|    Q|";
-        newR[12] = "|K    |";
-        newL[12] = "|    K|";
+
+        for(int i = 10; i < newR.length; i++){
+            newR[i] = "|" + JQK[i - 10] + "    |";
+            newL[i] = "|    " + JQK[i - 10] + "|";
+        }
 
         String[][] parts = {one, newR, newL};
         String[][] e = new String[52][5];
 
         int count = -1;
         for(int i = 0; i < e.length; i++){
-            if(i % 4 == 0){
+            if(i % 4 == 0)
                 count++;
-            }
-
             for(int j = 0; j < e[i].length; j++){
 
                 if(j == 0 || j == 4){
