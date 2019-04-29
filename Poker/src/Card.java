@@ -1,12 +1,16 @@
+import java.util.Arrays;
+
 public class Card {
     private String suit;
     private String rank;
     private int value;
+    private String[] prints;
 
-    Card(String rank, String suit, int value){
+    Card(String rank, String suit, int value, String[] prints){
         this.suit = suit;
         this.rank = rank;
         this.value = value;
+        this.prints = prints;
     }
 
     private String Suit(){
@@ -29,6 +33,10 @@ public class Card {
 //
 //    }
 
+    String[] Print(){
+        return prints;
+    }
+
     static boolean CompareVal(Card a, Card b){
         return a.Value() == b.Value();
     }
@@ -38,6 +46,6 @@ public class Card {
 
     @Override
     public String toString(){
-        return rank + " of " + suit + " (point value = " + value + ")";
+        return rank + " of " + suit + " (point value = " + value + ")" + Arrays.toString(prints);
     }
 }
