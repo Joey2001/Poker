@@ -58,7 +58,7 @@ public class Deck {
         return R;
     }
 
-    private static Card[] cardsUsed(){
+    static Card[] cardsUsed(){
         Card[] cardData = new Card[((PokerTester.numberOfPlayers * 2) + 5)];
         for(int i = 0; i < cardData.length; i++)
             cardData[i] = cards.get(i);
@@ -79,25 +79,13 @@ public class Deck {
         return player;
     }
 
-    static boolean[][][][] checkPoint(){
-        Card[][] players = new Card[PokerTester.numberOfPlayers][playerCards(1).length];
-        Card[] table = new Card[cardsUsed().length - (PokerTester.numberOfPlayers * 2)];
-        int v = 0;
-        for(int t = 0; t < players.length; t++){
-            for(int u = 0; u < players[0].length; u++){
-                players[t][u] = cardsUsed()[v];
-                v++;
-            }
+    static Card[] passPlayerXTable(int playerNum){
+        Card[] tP = new Card[7];
+        for(int i = 0; i < tP.length; i++){
+            tP[i] = cards.get((2 * playerNum) - (i + 1));
+            tP[i] = cards.get((i - 2) + (PokerTester.numberOfPlayers * 2));
         }
-        if (table.length >= 0) System.arraycopy(cardsUsed(), (PokerTester.numberOfPlayers * 2), table, 0, table.length);
-        boolean[][][][] checkCards = new boolean[PokerTester.numberOfPlayers][2][2][table.length];
-
-        for(int i = 0; i < PokerTester.numberOfPlayers; i++)
-            for(int j = 0; j < table.length; j++)
-                for(int k = 0; k < 2; k++)
-                    for(int l = 0; l < 2; l++)
-                        checkCards[i][k][l][j] = Card.CompareSuit(players[i][k], table[j]);
-        return checkCards;
+        return tP;
     }
 
     @Override
