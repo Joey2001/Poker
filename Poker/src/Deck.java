@@ -39,11 +39,13 @@ public class Deck {
 //    }
 
     private void Shuffle(){
-        for(int k = cards.size() - 1; k >= 0; k--) {
-            int r = (int)(Math.random() * k);
-            Card tempCard = cards.get(r);
-            cards.set(r, cards.get(k));
-            cards.set(k, tempCard);
+        for(int i = 0; i < Constants.timesToShuffle; i++) {
+            for (int k = cards.size() - 1; k >= 0; k--) {
+                int r = (int) (Math.random() * k);
+                Card tempCard = cards.get(r);
+                cards.set(r, cards.get(k));
+                cards.set(k, tempCard);
+            }
         }
     }
 
@@ -59,14 +61,14 @@ public class Deck {
     }
 
     static Card[] cardsUsed(){
-        Card[] cardData = new Card[((PokerTester.numberOfPlayers * 2) + 5)];
+        Card[] cardData = new Card[((Constants.numOfPlayers * 2) + 5)];
         for(int i = 0; i < cardData.length; i++)
             cardData[i] = cards.get(i);
         return cardData;
     }
 
     static String[][] playerCards(int playerNum){
-        String[][][] player = new String[PokerTester.numberOfPlayers][2][5];
+        String[][][] player = new String[Constants.numOfPlayers][2][5];
         for(int i = player[0].length - 1; i >= 0; i--)
             player[playerNum - 1][1 - i] = cards.get((2 * playerNum) - (i + 1)).Print();
         return player[playerNum - 1];
@@ -75,16 +77,16 @@ public class Deck {
     static String[][] giveTableCards(){
         String[][] player = new String[5][5];
         for(int i = player[0].length - 1; i >= 0; i--)
-            player[i] = cards.get(i + (PokerTester.numberOfPlayers * 2)).Print();
+            player[i] = cards.get(i + (Constants.numOfPlayers * 2)).Print();
         return player;
     }
 
     static Card[] passPlayerXTable(int playerNum){
         Card[] tP = new Card[7];
-        for(int i = 0; i < tP.length; i++){
-            tP[i] = cards.get((2 * playerNum) - (i + 1));
-            tP[i] = cards.get((i - 2) + (PokerTester.numberOfPlayers * 2));
-        }
+        for(int i = 1; i >= 0; i--)
+            tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
+        for(int j = 2; j < tP.length; j++)
+            tP[j] = cards.get((j - 2) + (Constants.numOfPlayers * 2));
         return tP;
     }
 
