@@ -1,7 +1,6 @@
 import java.util.Arrays;
 
 public class PokerTester {
-    static final int numberOfPlayers = 2;
     public static void main(String[] args){
 
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -12,7 +11,7 @@ public class PokerTester {
 
         CardMaker.printCard(CardMaker.constructCard());
         CardMaker.printCard(Deck.givePrint());
-        for(int i = 1; i <= numberOfPlayers; i++){
+        for(int i = 1; i <= Constants.numOfPlayers; i++){
             CardMaker.printCard(Deck.playerCards(i));
         }
         CardMaker.printCard(Deck.giveTableCards());
