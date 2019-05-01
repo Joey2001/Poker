@@ -1,0 +1,14 @@
+public class flushCheck {
+
+    // isFlush(): Will be true if l has a flush within, false otherwise
+
+    public static boolean isFlush( Card[] l)
+    }
+        if ( l.length !=5)
+            return (false);
+
+        sortBySuit(l);
+
+        return( l[0].suit() == l[4].suit() );
+
+        //Suit is replaceable by whatever method name we end up using for Suit/Rank, same with l
