@@ -3,13 +3,16 @@ class CardMaker{
     static String[][] constructCard(){
 
         String topBot = " ----- ";
-
         String[] one = {"|  ♥  |", "|  ♣  |", "|  ♦  |", "|  ♠  |"};
+        String[] JQK = {"J", "Q", "K"};
 
         String[] newR = new String[13];
         String[] newL = new String[13];
 
-        for(int i = 0; i < 10; i++){
+        newR[0]  = "|A    |";
+        newL[0]  = "|    A|";
+
+        for(int i = 1; i < 10; i++){
             if(i + 1 < 10){
                 newR[i] = "|" + (i + 1) + "    |";
                 newL[i] = "|    " + (i + 1) + "|";
@@ -18,59 +21,33 @@ class CardMaker{
                 newL[i] = "|   " + (i + 1) + "|";
             }
         }
-        newR[10] = "|J    |";
-        newL[10] = "|    J|";
-        newR[11] = "|Q    |";
-        newL[11] = "|    Q|";
-        newR[12] = "|K    |";
-        newL[12] = "|    K|";
+
+        for(int i = 10; i < newR.length; i++){
+            newR[i] = "|" + JQK[i - 10] + "    |";
+            newL[i] = "|    " + JQK[i - 10] + "|";
+        }
 
         String[][] parts = {one, newR, newL};
         String[][] e = new String[52][5];
 
         int count = -1;
-        int falseLoop;
         for(int i = 0; i < e.length; i++){
-            if(i % 13 == 0){
+            if(i % 4 == 0)
                 count++;
-            }
-            falseLoop = (i - (count * 13));
-
             for(int j = 0; j < e[i].length; j++){
 
                 if(j == 0 || j == 4){
                     e[i][j] = topBot;
                 }else if(j == 2){
-                    e[i][j] = parts[0][count];
+                    e[i][j] = parts[0][i % 4];
                 }else if(j == 3){
-                    e[i][j] = parts[2][falseLoop];
+                    e[i][j] = parts[2][count];
                 }else{
-                    e[i][j] = parts[1][falseLoop];
+                    e[i][j] = parts[1][count];
                 }
             }
         }
         return e;
-    }
-
-    static String[] symbol(){
-        String[] symbol = new String[52];
-        int count = -1;
-        String[] one = {"|  ♥  |", "|  ♣  |", "|  ♦  |", "|  ♠  |"};
-        for(int i = 0; i < symbol.length; i++){
-            if(i % 13 == 0){
-                count++;
-            }
-            symbol[i] = one[count];
-        }
-        return symbol;
-    }
-
-    static int[] value() {
-        int[] val = new int[52];
-        for(int i = 0; i < val.length; i++){
-            val[i] = i + 1;
-        }
-        return val;
     }
 
     static void printCard(String[][] card){
