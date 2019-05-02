@@ -83,10 +83,10 @@ public class Deck {
 
     static Card[] passPlayerXTable(int playerNum){
         Card[] tP = new Card[7];
-        for(int i = 1; i >= 0; i--)
-            tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
-        for(int j = 2; j < tP.length; j++)
-            tP[j] = cards.get((j - 2) + (Constants.numOfPlayers * 2));
+            for (int i = 1; i >= 0; i--)
+                tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
+            for (int j = 2; j < tP.length; j++)
+                tP[j] = cards.get((j - 2) + (Constants.numOfPlayers * 2));
         return tP;
     }
 
