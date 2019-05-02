@@ -29,5 +29,9 @@ public class PokerTester {
                 }
             }
         }
+        System.out.println();
+        for(int i = 0; i < Constants.numOfPlayers; i++){
+            System.out.println(Arrays.toString(Compare.Sort()[i]));
+        }
     }
 }
