@@ -44,7 +44,7 @@ public class PokerTester {
         }
         for(int j = 0; j < Constants.numOfSubRounds; j++) {
             CardMaker.printCard(tableAllRound[j]);
-            double[] betting = BetLogic.Betting(j, folded);
+            double[] betting = BetLogic.Betting(folded);
             for(int i = 0; i < betting.length; i++){
                 if(betting[i] < 0){
                     folded[j][i] = true;
