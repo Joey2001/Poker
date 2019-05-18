@@ -5,7 +5,7 @@ import java.util.Scanner;
 import java.util.regex.Pattern;
 
 class BetLogic {
-    static double[] Betting(int subRound, boolean[][] folding) throws IOException {
+    static double[] Betting(boolean[][] folding) throws IOException {
         String output = "";
         double highestBid = -1;
         double pot = 0;
