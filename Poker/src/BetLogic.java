@@ -6,16 +6,16 @@ import java.util.regex.Pattern;
 
 class BetLogic {
     static double[] Betting(boolean[][] folding) throws IOException {
-        String output = "";
+        StringBuilder output = new StringBuilder();
         double highestBid = -1;
         double pot = 0;
         int playersIn = Constants.numOfPlayers;
 
         double[] playersBet = new double[Constants.numOfPlayers];
         boolean[] playerFold = new boolean[Constants.numOfPlayers];
-        for(int i = 0; i < folding.length; i++){
-            for(int j = 0; j < folding[0].length; j++){
-                if(folding[i][j]){
+        for (boolean[] aFolding : folding) {
+            for (int j = 0; j < folding[0].length; j++) {
+                if (aFolding[j]) {
                     playerFold[j] = true;
                 }
             }
@@ -41,14 +41,14 @@ class BetLogic {
 
         for(int i = 0; i < playersBet.length; i++){
             if(playersBet[i] >= 0){
-                output += "Player " + (i + 1) + "'s bet was $" + playersBet[i] + "          ";
+                output.append("Player ").append(i + 1).append("'s bet was $").append(playersBet[i]).append("          ");
             }else{
-                output += "Player " + (i + 1) + " folded          ";
+                output.append("Player ").append(i + 1).append(" folded          ");
             }
         }
 
         BufferedWriter out = new BufferedWriter(new FileWriter("c:/Users/Josep/OneDrive/Documents/outputTest1.txt"));
-        out.write(output);
+        out.write(output.toString());
         out.close();
         return playersBet;
     }
@@ -70,10 +70,8 @@ class BetLogic {
             for (double aPlayersBet : playersBet)
                 if (aPlayersBet > 0)
                     pot += aPlayersBet;
-            if(playersIn != 0) {
-                System.out.println(playersIn);
+            if(playersIn != 0)
                 raiseBet(highestBid, playersBet, playerFold, pot, playersIn);
-            }
         }
     }
 
@@ -81,10 +79,8 @@ class BetLogic {
         Scanner betAmount = new Scanner(System.in);
         System.out.println("How much do you want to bet player " + (player + 1) + "?");
         String bets = betAmount.next();
-        if (!Pattern.matches("[a-zA-Z]+", bets) && Pattern.matches("[0-9]+", bets)) {
+        if (!Pattern.matches("[a-zA-Z]+", bets) && Pattern.matches("[0-9]+", bets))
             return Math.abs(Double.parseDouble(bets));
-        } else {
-            return -2;
-        }
+        return -1;
     }
 }
