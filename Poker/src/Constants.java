@@ -1,4 +1,5 @@
-public class Constants {
-    public static final int numOfPlayers = 4;
-    public static final int timesToShuffle = 3;
+class Constants {
+    static final int numOfPlayers = 4;
+    static final int timesToShuffle = 1;
+    static final int numOfSubRounds = 3;
 }
