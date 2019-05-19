@@ -66,6 +66,6 @@ class BetLogic {
         String bets = betAmount.next();
         if (!Pattern.matches("[a-zA-Z]+", bets) && Pattern.matches("[0-9]+", bets))
             return Math.abs(Double.parseDouble(bets));
-        return -1;
+        return -.0001;
     }
 }
