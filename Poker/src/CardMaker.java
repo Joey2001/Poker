@@ -13,7 +13,7 @@ class CardMaker{
         newL[0]  = "|    A|";
 
         for(int i = 1; i < 10; i++){
-            if(i + 1 < 10){
+            if(i != 9){
                 newR[i] = "|" + (i + 1) + "    |";
                 newL[i] = "|    " + (i + 1) + "|";
             }else{
