@@ -1,12 +1,8 @@
-import java.io.BufferedWriter;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 
 class BetLogic {
-    static double[] Betting(boolean[][] folding) throws IOException {
-        StringBuilder output = new StringBuilder();
+    static double[] Betting(boolean[][] folding){
         double highestBid = -1;
         double pot = 0;
         int playersIn = Constants.numOfPlayers;
@@ -39,17 +35,6 @@ class BetLogic {
         }
         raiseBet(highestBid, playersBet, playerFold, pot, playersIn);
 
-        for(int i = 0; i < playersBet.length; i++){
-            if(playersBet[i] >= 0){
-                output.append("Player ").append(i + 1).append("'s bet was $").append(playersBet[i]).append("          ");
-            }else{
-                output.append("Player ").append(i + 1).append(" folded          ");
-            }
-        }
-
-        BufferedWriter out = new BufferedWriter(new FileWriter("c:/Users/Josep/OneDrive/Documents/outputTest1.txt"));
-        out.write(output.toString());
-        out.close();
         return playersBet;
     }
 
