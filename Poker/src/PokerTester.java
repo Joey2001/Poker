@@ -27,8 +27,11 @@ public class PokerTester {
                     keepPlaying = false;
                 }
             }
-            output.addAll(temp);
+            for (String aTemp : temp) {
+                output.add(aTemp);
+            }
         }
+        output.add("The winner was player " + Compare.winner() + " ending with $" + playerCredit[Compare.winner() - 1]);
         BufferedWriter out = new BufferedWriter(new FileWriter("c:/Users/Josep/OneDrive/Documents/outputTest.txt"));
         out.write(output.toString());
         out.close();
@@ -93,11 +96,11 @@ public class PokerTester {
                 }
             }
         }
-         for(int i = 0; i < Constants.numOfPlayers; i++){
-             if(i + 1 == Compare.winner()){
+        for(int i = 0; i < Constants.numOfPlayers; i++){
+            if(i + 1 == Compare.winner()){
                 playerCredit[i] += sum;
-             }
-         }
+            }
+        }
         for(int i = 0; i < 30; i++){
             System.out.println();
         }
