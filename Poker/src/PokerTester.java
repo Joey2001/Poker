@@ -16,19 +16,9 @@ public class PokerTester {
             }
         }
 
-        for(int a = 0; a < Compare.checkPoint().length; a++){
-            for(int b = 0; b < Compare.checkPoint()[a].length; b++){
-                for(int c = 0; c < Compare.checkPoint()[a][b].length; c++){
-                    for(int d = 0; d < Compare.checkPoint()[a][b][c].length; d++){
-                        if(Compare.checkPoint()[a][b][c][d]){
-                            System.out.print(1);
-                        }else{
-                            System.out.print(0);
-                        }
-                    }
-                }
-            }
-        }
+        int[][] a = Compare.findSets();
+        System.out.println(Arrays.deepToString(a));
+
         System.out.println();
         for(int i = 0; i < Constants.numOfPlayers; i++){
             System.out.println(Arrays.toString(Compare.Sort()[i]));
