@@ -7,7 +7,10 @@ import java.util.Arrays;
 public class PokerTester {
     public static void main(String[] args) throws IOException {
         double[] playerCredit = new double[Constants.numOfPlayers];
+        double[] oldCredit = new double[Constants.numOfPlayers];
+        double[] deltaCredit = new double[Constants.numOfPlayers];
         Arrays.fill(playerCredit, Constants.startingAmount);
+        Arrays.fill(oldCredit, Constants.startingAmount);
         ArrayList<String> temp;
         ArrayList<String> output = new ArrayList<>();
 
@@ -21,15 +24,19 @@ public class PokerTester {
 
         while(keepPlaying) {
             playerCredit = game(playerCredit);
-            temp = passToFile(playerCredit);
+            for(int i = 0; i < Constants.numOfPlayers; i++){
+                deltaCredit[i] = oldCredit[i] - playerCredit[i];
+            }
+            temp = passToFile(deltaCredit);
             for (double aNewCred : playerCredit) {
                 if (aNewCred < 0) {
                     keepPlaying = false;
                 }
             }
-            for (String aTemp : temp) {
-                output.add(aTemp);
+            for (int i = 0; i < temp.size(); i++) {
+                output.add(temp.get(i));
             }
+            oldCredit = playerCredit;
         }
         output.add("The winner was player " + Compare.winner() + " ending with $" + playerCredit[Compare.winner() - 1]);
         BufferedWriter out = new BufferedWriter(new FileWriter("c:/Users/Josep/OneDrive/Documents/outputTest.txt"));
@@ -123,8 +130,6 @@ public class PokerTester {
         for (int i = 0; i < bets.length; i++) {
             if (bets[i] >= 0) {
                 output.add("Player " + (i + 1) + "'s bet was $" + bets[i] + "          ");
-            } else {
-                output.add("Player " + (i + 1)+ " folded          ");
             }
         }
         return output;
