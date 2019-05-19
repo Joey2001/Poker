@@ -1,28 +1,37 @@
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Arrays;
 
 public class PokerTester {
     public static void main(String[] args) throws IOException {
         double[] playerCredit = new double[Constants.numOfPlayers];
         Arrays.fill(playerCredit, Constants.startingAmount);
+        ArrayList<String> temp;
+        ArrayList<String> output = new ArrayList<>();
 
         boolean keepPlaying = true;
+
+        System.out.println("Every player starts with $" + Constants.startingAmount + "\nPass computer to player one");
+        System.in.read();
+        for(int i = 0; i < 20; i++){
+            System.out.println();
+        }
+
         while(keepPlaying) {
             playerCredit = game(playerCredit);
+            temp = passToFile(playerCredit);
             for (double aNewCred : playerCredit) {
                 if (aNewCred < 0) {
                     keepPlaying = false;
                 }
             }
+            output.addAll(temp);
         }
-
-        int[][] a = Compare.findSets();
-        System.out.println(Arrays.deepToString(a));
-
-        System.out.println();
-        for(int i = 0; i < Constants.numOfPlayers; i++){
-            System.out.println(Arrays.toString(Compare.Sort()[i]));
-        }
+        BufferedWriter out = new BufferedWriter(new FileWriter("c:/Users/Josep/OneDrive/Documents/outputTest.txt"));
+        out.write(output.toString());
+        out.close();
     }
     private static double[] game(double[] playerCredit) throws IOException {
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
@@ -49,8 +58,6 @@ public class PokerTester {
         }
         String[][][] tableAllRound = {tableR1, tableR2, Deck.giveTableCards()};
 
-        CardMaker.printCard(CardMaker.constructCard());
-        CardMaker.printCard(Deck.givePrint());
         for (int i = 1; i <= Constants.numOfPlayers; i++) {
             System.out.println("Player " + i + " cards");
             CardMaker.printCard(Deck.playerCards(i));
@@ -67,7 +74,6 @@ public class PokerTester {
                 System.out.println();
             }
         }
-        System.out.println("Every player starts with $" + Constants.startingAmount);
         for (int j = 0; j < Constants.numOfSubRounds; j++) {
             CardMaker.printCard(tableAllRound[j]);
             double[] betting = BetLogic.Betting(folded);
@@ -87,16 +93,11 @@ public class PokerTester {
                 }
             }
         }
-        /*
-         * for(int i = 0; i < Constants.numOfPlayers){
-         *     if(player[i] == winner){
-         *        playerCredit[i] += sum;
-         *     }
-         * }
-         * */
-        System.out.println(sum);
-        System.out.println(Arrays.toString(playerCredit));
-        System.out.println(Arrays.deepToString(folded));
+         for(int i = 0; i < Constants.numOfPlayers; i++){
+             if(i + 1 == Compare.winner()){
+                playerCredit[i] += sum;
+             }
+         }
         for(int i = 0; i < 30; i++){
             System.out.println();
         }
@@ -112,5 +113,17 @@ public class PokerTester {
             System.out.println("Thanks for playing, unfortunately one or more players has run out of money.");
         }
         return playerCredit;
+    }
+
+    private static ArrayList<String> passToFile(double[] bets){
+        ArrayList<String> output = new ArrayList<>();
+        for (int i = 0; i < bets.length; i++) {
+            if (bets[i] >= 0) {
+                output.add("Player " + (i + 1) + "'s bet was $" + bets[i] + "          ");
+            } else {
+                output.add("Player " + (i + 1)+ " folded          ");
+            }
+        }
+        return output;
     }
 }
