@@ -25,7 +25,9 @@ public class PokerTester {
         while(keepPlaying) {
             playerCredit = game(playerCredit);
             for(int i = 0; i < Constants.numOfPlayers; i++){
-                deltaCredit[i] = oldCredit[i] - playerCredit[i];
+                if(playerCredit[i] != -.0001){
+                    deltaCredit[i] = oldCredit[i] - playerCredit[i];
+                }
             }
             temp = passToFile(deltaCredit);
             for (double aNewCred : playerCredit) {
