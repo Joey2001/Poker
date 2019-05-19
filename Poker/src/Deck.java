@@ -1,7 +1,6 @@
 import java.util.ArrayList;
 
 public class Deck {
-    private static String[][] printCards;
     private static ArrayList<Card> cards;
     private int deckSize;
 
@@ -18,25 +17,8 @@ public class Deck {
         }
         this.deckSize = cards.size();
         Shuffle();
-        printCards = passPrint();
 
     }
-
-//    boolean isEmpty(){
-//        return cards.size() == 0;
-//    }
-
-//    int size(){
-//        return cards.size();
-//    }
-
-//    Card deal(){
-//        if(this.deckSize > 0){
-//            this.deckSize--;
-//            return cards.get(this.deckSize);
-//        }
-//        return null;
-//    }
 
     private void Shuffle(){
         for(int i = 0; i < Constants.timesToShuffle; i++) {
@@ -49,24 +31,6 @@ public class Deck {
         }
     }
 
-    static String[][] givePrint(){
-        return printCards;
-    }
-
-    private static String[][] passPrint(){
-        String[][] R = new String[52][5];
-        for(int i = 0; i < 52; i++)
-            R[i] = cards.get(i).Print();
-        return R;
-    }
-
-    static Card[] cardsUsed(){
-        Card[] cardData = new Card[((Constants.numOfPlayers * 2) + 5)];
-        for(int i = 0; i < cardData.length; i++)
-            cardData[i] = cards.get(i);
-        return cardData;
-    }
-
     static String[][] playerCards(int playerNum){
         String[][][] player = new String[Constants.numOfPlayers][2][5];
         for(int i = player[0].length - 1; i >= 0; i--)
@@ -74,19 +38,33 @@ public class Deck {
         return player[playerNum - 1];
     }
 
+    static Card[] playerX(int playerNum){
+        Card[] tP = new Card[2];
+        for (int i = 1; i >= 0; i--)
+            tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
+        return tP;
+    }
+
     static String[][] giveTableCards(){
-        String[][] player = new String[5][5];
-        for(int i = player[0].length - 1; i >= 0; i--)
-            player[i] = cards.get(i + (Constants.numOfPlayers * 2)).Print();
-        return player;
+        String[][] table = new String[5][5];
+        for(int i = table[0].length - 1; i >= 0; i--)
+            table[i] = cards.get(i + (Constants.numOfPlayers * 2)).Print();
+        return table;
+    }
+
+    static Card[] giveJustTable(){
+        Card[] table = new Card[5];
+        for(int i = table.length - 1; i >= 0; i--)
+            table[i] = cards.get(i + (Constants.numOfPlayers * 2));
+        return table;
     }
 
     static Card[] passPlayerXTable(int playerNum){
         Card[] tP = new Card[7];
-            for (int i = 1; i >= 0; i--)
-                tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
-            for (int j = 2; j < tP.length; j++)
-                tP[j] = cards.get((j - 2) + (Constants.numOfPlayers * 2));
+        for (int i = 1; i >= 0; i--)
+            tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
+        for (int j = 2; j < tP.length; j++)
+            tP[j] = cards.get((j - 2) + (Constants.numOfPlayers * 2));
         return tP;
     }
 
