@@ -10,7 +10,7 @@ class Compare {
         return cards;
     }
 
-    static boolean[] detectStraight(){
+    private static boolean[] detectStraight(){
         Card[][] sortedCard = Sort();
         boolean[][] a = new boolean[5][Constants.numOfPlayers];
         for(int i = 0; i < a[0].length; i++){
@@ -33,11 +33,11 @@ class Compare {
         }
         return a[4];
     }
-    static boolean[] detectStraightFlush(){
+    private static boolean[] detectStraightFlush(){
         Card[][] sortedCard = Sort();
         boolean[] flush = detectStraight();
         boolean[][] a = new boolean[5][Constants.numOfPlayers];
-        for(int i = 0; i < a.length; i++){
+        for(int i = 0; i < a[0].length; i++){
             String cardOne = sortedCard[i][0].Suit();
             String cardTwo = sortedCard[i][1].Suit();
             String cardThree = sortedCard[i][2].Suit();
@@ -56,7 +56,7 @@ class Compare {
         return a[4];
     }
 
-    static boolean[] detectFlush(){
+    private static boolean[] detectFlush(){
         Card[][] sortedCard = Sort();
         int[][] c = new int[Constants.numOfPlayers][4];
         boolean[] flush = new boolean[Constants.numOfPlayers];
@@ -80,7 +80,7 @@ class Compare {
         return flush;
     }
 
-    static int[] highestFlush(){
+    private static int[] highestFlush(){
         boolean[][] a = giveHighFlush();
         Card[][] sortedCard = Sort();
         int[] highCard = new int[Constants.numOfPlayers];
@@ -100,10 +100,10 @@ class Compare {
         return highCard;
     }
 
-    static boolean[][] giveHighFlush(){
+    private static boolean[][] giveHighFlush(){
         Card[][] sortedCard = Sort();
         boolean[][] a = new boolean[4][Constants.numOfPlayers];
-        for(int i = 0; i < a.length; i++){
+        for(int i = 0; i < a[0].length; i++){
             String cardOne = sortedCard[i][0].Suit();
             String cardTwo = sortedCard[i][1].Suit();
             String cardThree = sortedCard[i][2].Suit();
@@ -117,11 +117,11 @@ class Compare {
         return a;
     }
 
-    static int[] highestCard(){
+    private static int[] highestCard(){
         int[] hiCard = new int[Constants.numOfPlayers];
         Card[][] player = new Card[Constants.numOfPlayers][2];
         for(int j = 0; j < Constants.numOfPlayers; j++){
-            player[j] = Deck.playerX(j);
+            player[j] = Deck.playerX(j + 1);
         }
         for(int i = 0; i < hiCard.length; i++){
             hiCard[i] = player[i][1].Value();
@@ -131,7 +131,7 @@ class Compare {
         return hiCard;
     }
 
-    static int[][] findSets(){
+    private static int[][] findSets(){
         Card[] arr = Deck.giveJustTable();
         Card[][] player = new Card[Constants.numOfPlayers][2];
         int[][] restHouse = new int[Constants.numOfPlayers][4];
@@ -189,7 +189,58 @@ class Compare {
         return restHouse;
     }
 
-    static Card[][] Sort(){
+    private static double[] points(){
+        Card[][] cards = Sort();
+        boolean[] straight = detectStraight();
+        boolean[] flush = detectFlush();
+        boolean[] straightFlush = detectStraightFlush();
+        int[] highestFlush = highestFlush();
+        int[] highestCard = highestCard();
+        int[][] restOfHands = findSets();
+        double[] points = new double[Constants.numOfPlayers];
+        for(int i = 0; i < points.length; i++){
+            if(straightFlush[i] && cards[i][6].Value() == 14){
+                points[i] = 2140000000;
+            }else if(straightFlush[i]){
+                points[i] = (highestFlush[i] * 7000000) + (((double)highestCard[i]) / 100);
+            }else if(restOfHands[i][3] > 0){
+                points[i] = (restOfHands[i][3] * 600000) + (((double)highestCard[i]) / 100);
+            }else if(restOfHands[i][2] > 0 && restOfHands[i][1] > 0){
+                points[i] = ((restOfHands[i][2] + restOfHands[i][1]) * 50000) + (((double)highestCard[i]) / 100);
+            }else if(flush[i]){
+                points[i] = (highestFlush[i] * 4000) + (((double)highestCard[i]) / 100);
+            }else if(straight[i]){
+                points[i] = (highestFlush[i] * 300) + (((double)highestCard[i]) / 100);
+            }else if(restOfHands[i][2] > 0){
+                points[i] = (restOfHands[i][2] * 20) + (((double)highestCard[i]) / 100);
+            }else if(restOfHands[i][1] > 0){
+                points[i] = restOfHands[i][1] + (((double)highestCard[i]) / 100);
+            }else if(restOfHands[i][0] > 0){
+                points[i] = ((double) restOfHands[i][0]) / 10 + (((double)highestCard[i]) / 100);
+            }else{
+                points[i] = ((double)highestCard[i]) / 100;
+            }
+        }
+        return points;
+    }
+
+    static int winner(){
+        double[] playerPoints = points();
+        double mostPoints = 0;
+        for(int i = 0; i < Constants.numOfPlayers; i++){
+            if(playerPoints[i] > mostPoints){
+                mostPoints = playerPoints[i];
+            }
+        }
+        for(int j = 0; j < Constants.numOfPlayers; j++){
+            if(playerPoints[j] == mostPoints){
+                return j + 1;
+            }
+        }
+        return 0;
+    }
+
+    private static Card[][] Sort(){
         Card[][] arr = getData();
 
         for(int a = 0; a < arr.length; a++) {
