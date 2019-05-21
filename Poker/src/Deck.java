@@ -1,12 +1,15 @@
 import java.util.ArrayList;
 
 public class Deck {
+//    initializes internal variables
     private static ArrayList<Card> cards;
     private int deckSize;
 
     Deck(String[] rank, String[] suit, int[] value, String[][] prints){
+//        initializes the cards array list every time the deck class is initialized
         cards = new ArrayList<>();
 
+//        variable to properly store the prints
         int z = 0;
         for(int j = 0; j < rank.length; j++) {
             for (String aSuit : suit) {
@@ -20,8 +23,11 @@ public class Deck {
 
     }
 
+//    shuffles the cards into a random order
     private void Shuffle(){
+//        determines how many times the deck is shuffled
         for(int i = 0; i < Constants.timesToShuffle; i++) {
+//            shuffles the cards by switching two cards at a time
             for (int k = cards.size() - 1; k >= 0; k--) {
                 int r = (int) (Math.random() * k);
                 Card tempCard = cards.get(r);
@@ -31,41 +37,22 @@ public class Deck {
         }
     }
 
-    static String[][] playerCards(int playerNum){
-        String[][][] player = new String[Constants.numOfPlayers][2][5];
-        for(int i = player[0].length - 1; i >= 0; i--)
-            player[playerNum - 1][1 - i] = cards.get((2 * playerNum) - (i + 1)).Print();
-        return player[playerNum - 1];
-    }
-
-    static Card[] playerX(int playerNum){
+//    passes a card array by giving the player number
+    static Card[] playerCards(int playerNum){
         Card[] tP = new Card[2];
+//        fills the array with the appropriate cards and is done this way to allow for up to 23 players
         for (int i = 1; i >= 0; i--)
             tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
         return tP;
     }
 
-    static String[][] giveTableCards(){
-        String[][] table = new String[5][5];
-        for(int i = table[0].length - 1; i >= 0; i--)
-            table[i] = cards.get(i + (Constants.numOfPlayers * 2)).Print();
-        return table;
-    }
-
+//    passes the table cards
     static Card[] giveJustTable(){
         Card[] table = new Card[5];
+//        fills the array with the appropriate cards and is done this way to allow for up to 23 players
         for(int i = table.length - 1; i >= 0; i--)
             table[i] = cards.get(i + (Constants.numOfPlayers * 2));
         return table;
-    }
-
-    static Card[] passPlayerXTable(int playerNum){
-        Card[] tP = new Card[7];
-        for (int i = 1; i >= 0; i--)
-            tP[1 - i] = cards.get((2 * playerNum) - (i + 1));
-        for (int j = 2; j < tP.length; j++)
-            tP[j] = cards.get((j - 2) + (Constants.numOfPlayers * 2));
-        return tP;
     }
 
     @Override
