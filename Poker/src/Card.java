@@ -1,4 +1,5 @@
 public class Card {
+    //initializes internal variables that are passed to the card class
     private String suit;
     private String rank;
     private int value;
@@ -11,14 +12,17 @@ public class Card {
         this.prints = prints;
     }
 
+//    returns the value of the suit
     String Suit(){
         return suit;
     }
 
+//    returns value of the card
     int Value(){
         return value;
     }
 
+//    returns the string array of the card to print
     String[] Print(){
         return prints;
     }
