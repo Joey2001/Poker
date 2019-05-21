@@ -64,7 +64,7 @@ class BetLogic {
         Scanner betAmount = new Scanner(System.in);
         System.out.println("How much do you want to bet player " + (player + 1) + "?");
         String bets = betAmount.next();
-        if (!Pattern.matches("[a-zA-Z]+", bets) && Pattern.matches("[0-9]+", bets))
+        if (!Pattern.matches("[a-zA-Z]+", bets) && Pattern.matches("[0-9]+", bets) && bets.length() < 6)
             return Math.abs(Double.parseDouble(bets));
         return -.0001;
     }
