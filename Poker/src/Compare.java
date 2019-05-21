@@ -1,18 +1,12 @@
 import java.util.ArrayList;
-import java.util.Arrays;
 
 class Compare {
-    private static Card[][] getData(){
-        Card[][] cards = new Card[Constants.numOfPlayers][7];
-        for(int i = 0; i < cards.length; i++){
-            cards[i] = Deck.passPlayerXTable(i + 1);
-        }
-        return cards;
-    }
 
+//    finds if five cards in succession are going up by one as the sorted list is checked
     private static boolean[] detectStraight(){
         Card[][] sortedCard = Sort();
         boolean[][] a = new boolean[5][Constants.numOfPlayers];
+//        goes through all of the players to check for the straight or a flush
         for(int i = 0; i < a[0].length; i++){
             int cardOne = sortedCard[i][0].Value();
             int cardTwo = sortedCard[i][1].Value();
@@ -24,6 +18,7 @@ class Compare {
                 a[3][i] = cardTwo == 3 && cardThree == 4 && sortedCard[i][3].Value() == 5;
             }
         }
+//        determines if one of the values is a flush and passes only one boolean per player
         for(int i = 0; i < a.length; i++){
             for(int j = 0; j < Constants.numOfPlayers; j++){
                 if(a[i][j]){
@@ -33,6 +28,8 @@ class Compare {
         }
         return a[4];
     }
+
+//    takes the data from detectStraight to determine if a flush is found with all the suits matching
     private static boolean[] detectStraightFlush(){
         Card[][] sortedCard = Sort();
         boolean[] flush = detectStraight();
@@ -56,6 +53,7 @@ class Compare {
         return a[4];
     }
 
+//    this method just determines if a hand just has matching suits
     private static boolean[] detectFlush(){
         Card[][] sortedCard = Sort();
         int[][] c = new int[Constants.numOfPlayers][4];
@@ -80,6 +78,7 @@ class Compare {
         return flush;
     }
 
+//    this method determines what card is the highest value in the flush
     private static int[] highestFlush(){
         boolean[][] a = giveHighFlush();
         Card[][] sortedCard = Sort();
@@ -100,6 +99,19 @@ class Compare {
         return highCard;
     }
 
+//    determines if a player has a royal flush and is just a simpler way of doing so
+    private static boolean[] detectRoyal(){
+        boolean[] royalFlush = new boolean[Constants.numOfPlayers];
+        Card[][] sortedCard = Sort();
+        for(int i = 0; i < Constants.numOfPlayers; i++){
+            if(sortedCard[i][2].Value() == 10 && sortedCard[i][3].Value() == 11 && sortedCard[i][4].Value() == 12 && sortedCard[i][5].Value() == 13 && sortedCard[i][6].Value() == 14){
+                royalFlush[i] = true;
+            }
+        }
+        return royalFlush;
+    }
+
+//    passes in the raw boolean value to highest flush to determine what section has the highest card in the flush
     private static boolean[][] giveHighFlush(){
         Card[][] sortedCard = Sort();
         boolean[][] a = new boolean[4][Constants.numOfPlayers];
@@ -117,11 +129,13 @@ class Compare {
         return a;
     }
 
+//    determines what is the highest card that the player has
+//    this is needed to determine which player gets the pot when they have the same cards
     private static int[] highestCard(){
         int[] hiCard = new int[Constants.numOfPlayers];
         Card[][] player = new Card[Constants.numOfPlayers][2];
         for(int j = 0; j < Constants.numOfPlayers; j++){
-            player[j] = Deck.playerX(j + 1);
+            player[j] = Deck.playerCards(j + 1);
         }
         for(int i = 0; i < hiCard.length; i++){
             hiCard[i] = player[i][1].Value();
@@ -131,16 +145,17 @@ class Compare {
         return hiCard;
     }
 
+//    determines if a player has a pair, two pair, three or four of a kind
     private static int[][] findSets(){
         Card[] arr = Deck.giveJustTable();
         Card[][] player = new Card[Constants.numOfPlayers][2];
         int[][] restHouse = new int[Constants.numOfPlayers][4];
         for(int j = 0; j < Constants.numOfPlayers; j++){
-            player[j] = Deck.playerX(j + 1);
+            player[j] = Deck.playerCards(j + 1);
         }
         ArrayList<Integer>[] nums = new ArrayList[Constants.numOfPlayers];
         for (int i = 0; i < Constants.numOfPlayers; i++) {
-            nums[i] = new ArrayList<Integer>();
+            nums[i] = new ArrayList<>();
         }
 
         for(int i = 0; i < Constants.numOfPlayers; i++){
@@ -183,23 +198,21 @@ class Compare {
                 }
             }
         }
-        for(int i = 0; i < Constants.numOfPlayers; i++){
-            System.out.println(Arrays.toString(nums[i].toArray()));
-        }
         return restHouse;
     }
 
+//    determines how many points each player gets
     private static double[] points(){
-        Card[][] cards = Sort();
         boolean[] straight = detectStraight();
         boolean[] flush = detectFlush();
         boolean[] straightFlush = detectStraightFlush();
+        boolean[] royal = detectRoyal();
         int[] highestFlush = highestFlush();
         int[] highestCard = highestCard();
         int[][] restOfHands = findSets();
         double[] points = new double[Constants.numOfPlayers];
         for(int i = 0; i < points.length; i++){
-            if(straightFlush[i] && cards[i][6].Value() == 14){
+            if(straightFlush[i] && royal[i]){
                 points[i] = 2140000000;
             }else if(straightFlush[i]){
                 points[i] = (highestFlush[i] * 7000000) + (((double)highestCard[i]) / 100);
@@ -224,6 +237,7 @@ class Compare {
         return points;
     }
 
+//    determines which player has the most points and returns the player number
     static int winner(){
         double[] playerPoints = points();
         double mostPoints = 0;
@@ -240,8 +254,20 @@ class Compare {
         return 0;
     }
 
+//    this method takes some methods found in deck that pass the player and table
+//    and sorts each player and then feeds the 2D Card array to the check logic
     private static Card[][] Sort(){
-        Card[][] arr = getData();
+        Card[][] arr = new Card[Constants.numOfPlayers][7];
+        Card[] table = Deck.giveJustTable();
+        for(int i = 0; i < Constants.numOfPlayers; i++){
+            Card[] player = Deck.playerCards(i + 1);
+            for(int j = 0; j < (player.length + table.length); j++){
+                if(j < player.length)
+                    arr[i][j] = player[j];
+                else
+                    arr[i][j] = table[j - 2];
+            }
+        }
 
         for(int a = 0; a < arr.length; a++) {
             for (int i = 0; i < arr[0].length; i++) {
