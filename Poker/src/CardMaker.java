@@ -2,6 +2,8 @@ class CardMaker{
 
     static String[][] constructCard(){
 
+//        initializing and creating Strings and String arrays to fill the 2D string array
+//        used to pass into the deck class
         String topBot = " ----- ";
         String[] one = {"|  ♥  |", "|  ♣  |", "|  ♦  |", "|  ♠  |"};
         String[] JQK = {"J", "Q", "K"};
@@ -30,6 +32,7 @@ class CardMaker{
         String[][] parts = {one, newR, newL};
         String[][] e = new String[52][5];
 
+//        fills the 2D array with the proper String arrays
         int count = -1;
         for(int i = 0; i < e.length; i++){
             if(i % 4 == 0)
@@ -51,6 +54,8 @@ class CardMaker{
     }
 
     static void printCard(String[][] card){
+//        prints each section of each card in such a way that the
+//        result is all of the card being printed from left to right
         for(int i = 0; i < card[0].length; i++){
             for (String[] aCard : card)
                 System.out.print(aCard[i] + "      ");
