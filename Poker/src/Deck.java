@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 
 public class Deck {
-//    initializes internal variables
+    //    initializes internal variables
     private static ArrayList<Card> cards;
     private int deckSize;
 
@@ -23,7 +23,7 @@ public class Deck {
 
     }
 
-//    shuffles the cards into a random order
+    //    shuffles the cards into a random order
     private void Shuffle(){
 //        determines how many times the deck is shuffled
         for(int i = 0; i < Constants.timesToShuffle; i++) {
@@ -37,7 +37,7 @@ public class Deck {
         }
     }
 
-//    passes a card array by giving the player number
+    //    passes a card array by giving the player number
     static Card[] playerCards(int playerNum){
         Card[] tP = new Card[2];
 //        fills the array with the appropriate cards and is done this way to allow for up to 23 players
@@ -46,7 +46,7 @@ public class Deck {
         return tP;
     }
 
-//    passes the table cards
+    //    passes the table cards
     static Card[] giveJustTable(){
         Card[] table = new Card[5];
 //        fills the array with the appropriate cards and is done this way to allow for up to 23 players
