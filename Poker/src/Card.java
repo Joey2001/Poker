@@ -12,17 +12,17 @@ public class Card {
         this.prints = prints;
     }
 
-//    returns the value of the suit
+    //    returns the value of the suit
     String Suit(){
         return suit;
     }
 
-//    returns value of the card
+    //    returns value of the card
     int Value(){
         return value;
     }
 
-//    returns the string array of the card to print
+    //    returns the string array of the card to print
     String[] Print(){
         return prints;
     }
