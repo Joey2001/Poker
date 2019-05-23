@@ -60,19 +60,11 @@ class Compare {
         int[][] c = new int[Constants.numOfPlayers][4];
         boolean[] flush = new boolean[Constants.numOfPlayers];
         String[] suits = {"♥", "♣", "♦", "♠"};
-        for(int a = 0; a < c.length; a++){
-            for(int b = 0; b < 7; b++){
-                if(sortedCard[a][b].Suit().equals(suits[0])){
-                    c[a][0]++;
-                }else if(sortedCard[a][b].Suit().equals(suits[1])){
-                    c[a][1]++;
-                }else if(sortedCard[a][b].Suit().equals(suits[2])){
-                    c[a][2]++;
-                }else if(sortedCard[a][b].Suit().equals(suits[3])){
-                    c[a][3]++;
-                }
-            }
-        }
+        for(int a = 0; a < Constants.numOfPlayers; a++)
+            for(int b = 0; b < 7; b++)
+                for(int i = 0; i < 4; i++)
+                    if(sortedCard[a][b].Suit().equals(suits[i]))
+                        c[a][i]++;
         for(int d = 0; d < flush.length; d++)
             if(c[d][0] >= 5 || c[d][1] >= 5 || c[d][2] >= 5 || c[d][3] >= 5)
                 flush[d] = true;
