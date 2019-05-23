@@ -72,7 +72,7 @@ public class PokerTester {
 
         double[] deltaCredit = new double[oldCredit.length];
         ArrayList<String> temp;
-        playerCredit = game(playerCredit);
+        playerCredit = game(playerCredit, keepPlaying);
 //        finds the difference between the last credit versus this credit
         for (int i = 0; i < Constants.numOfPlayers; i++) {
             if (playerCredit[i] != -.0001) {
@@ -83,7 +83,7 @@ public class PokerTester {
         temp = passToFile(deltaCredit);
 //        checks if the credit is 0 or greater to continue the game
         for (double aNewCred : playerCredit)
-            keepPlaying = aNewCred >= 0;
+            keepPlaying = aNewCred > 0;
 //        adds the entire temp array list to the output to eventually get to a txt file
         output.addAll(temp);
 //        old credit is now the player credit because player credit will change
@@ -110,7 +110,7 @@ public class PokerTester {
         return output;
     }
 
-    private static double[] game(double[] playerCredit) throws IOException {
+    private static double[] game(double[] playerCredit, boolean keepPlay) throws IOException {
 //        initializes the ranks, suits, and point values here
         String[] ranks = {"A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"};
         String[] suits = {"♥", "♣", "♦", "♠"};
@@ -120,7 +120,6 @@ public class PokerTester {
         new Deck(ranks, suits, pointValues, CardMaker.constructCard());
 
 //        contains all of the bets from the entire round
-        double[][] allBets = new double[Constants.numOfSubRounds][Constants.numOfPlayers];
 
 //        constructs and fills two more 2D String arrays to print out the correct table
 //        and make it look like an actual game of Poker as much as possible
@@ -170,27 +169,29 @@ public class PokerTester {
             }
         }
 //        repeats everything in the for loop necessary for the three sub rounds to happen
-        for (int j = 0; j < Constants.numOfSubRounds; j++) {
+        int j = 0;
+        double sum = 0;
+        while(j < Constants.numOfSubRounds && keepPlay) {
 //            prints the necessary table state for the round
             CardMaker.printCard(tableAllRound[j]);
 //            betting is called and stored in the betting array
             double[] betting = BetLogic.Betting(folded, playerCredit);
 //            this checks if each player has folded or not
-            for (int i = 0; i < betting.length; i++)
-                folded[j][i] = betting[i] >= 0;
-//            sets the betting array to part of the 2D allBets array
-            allBets[j] = betting;
-        }
+            for (int i = 0; i < betting.length; i++) {
+                folded[j][i] = betting[i] < 0;
+            }
 //        sum just finds the total amount of money is in the pot and takes
 //        an appropriate amount from each player
-        double sum = 0;
-        for (double[] allBet : allBets) {
-            for (int j = 0; j < allBet.length; j++) {
-                if (allBet[j] != -.0001) {
-                    sum += allBet[j];
-                    playerCredit[j] -= allBet[j];
+            for (int k = 0; k < betting.length; k++) {
+                if (betting[k] != -.0001) {
+                    sum += betting[k];
+                    playerCredit[k] -= betting[k];
                 }
             }
+//            stops the sub round if one of the players has run out of money
+            for (double aNewCred : playerCredit)
+                keepPlay = aNewCred > 0;
+            j++;
         }
 //        this part finds who the winner is and gives them the pot
         for(int i = 1; i <= Constants.numOfPlayers; i++){
